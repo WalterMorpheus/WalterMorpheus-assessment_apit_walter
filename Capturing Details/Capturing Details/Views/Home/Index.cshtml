@@ -1,0 +1,59 @@
+﻿@model CaptureViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Capture</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Capture" asp-controller="Home" method="post">
+
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label for="ClienName">Name</label>
+                            <input type="text" class="form-control" id="ClienName" name="ClienName" value="@Model.ClienName" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="Number">Number of Users</label>
+                            <input type="number" class="form-control" id="Number" name="Number" value="@Model.Number" required />
+                        </div>
+
+                         <div class="form-group">
+                            <label for="DateRegistered">Registration Date</label>
+                            <input type="date" class="form-control" id="DateRegistered" name="DateRegistered" value="@Model.DateRegistered.ToString("yyyy-MM-dd")" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locationId">Location</label>
+                            <select class="form-control" id="locationId" name="locationId" required>
+                                <option value="">Select Location</option>
+                                @foreach (var location in Model.Locations!)
+                                {
+                                    <option value="@location.Id">@location.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Save</button>
+                        </div>
+
+                       
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (@Model.Notification!.Show)
+{
+    @Html.Partial("_Notification", Model.Notification)
+}
+
+
