@@ -9,11 +9,6 @@ namespace Repo.Data.Seed
     {
         public static async Task Initial(ClientDbContext context)
         {
-            var test = new UserRepository(context);
-
-            var tu = test.ClientsCreatedPerDate();
-
-
             await Locations(context);
             await DummyUsers(context);
         }

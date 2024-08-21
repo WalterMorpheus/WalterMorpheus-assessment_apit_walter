@@ -3,6 +3,7 @@ using Repo.Data;
 using Repo.Data.Models;
 using Repo.Interface;
 using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Repo
 {
@@ -18,18 +19,15 @@ namespace Repo
         {
             var usersPerLocation = new List<UsersPerLocation>();
 
-            var list = from locations in _context.Location
-                       select new
-                       {
-                           Location = locations.Name,
-                           UserCount = _context.SystemUser.Where(x => x.LocationId == locations.Id)
-                                                         .Select(x => x.Number)
-                                                         .FirstOrDefault()
-                       };
+            var list = _context.Location.Select(x => x.Id).ToList();
 
             if (list.Any())
             {
-                usersPerLocation = list.Select(item => new UsersPerLocation { Location = item.Location, UserCount = item.UserCount }).ToList();
+                foreach (var locationId in list)
+                {
+                    var count = _context.SystemUser.Where(x => x.LocationId == locationId).Sum(x => x.Number);
+                    usersPerLocation.Add(new UsersPerLocation { Location = _context.Location.FirstOrDefault(x=>x.Id == locationId)!.Name, UserCount = count });
+                }
             }
 
             return usersPerLocation;
@@ -46,6 +44,7 @@ namespace Repo
                 foreach (var date in list)
                 {
                     var count = _context.SystemUser.Where(x => x.DateRegistered == date).Sum(x=>x.Number);
+                    createdPerDates.Add(new ClientsCreatedPerDate { DateRegistered = date,UserCount = count });
                 }
             }
 

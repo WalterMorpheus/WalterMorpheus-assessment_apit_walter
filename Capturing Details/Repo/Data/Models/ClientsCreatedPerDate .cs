@@ -8,6 +8,7 @@ namespace Repo.Data.Models
 {
     public class ClientsCreatedPerDate
     {
-
+        public DateOnly DateRegistered { get; set; }
+        public int UserCount { get; set; }
     }
 }
